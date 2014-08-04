@@ -2,5 +2,12 @@
 <resources>
     <declare-styleable name="NewsDigestSplashView">
         <attr name="removeFromParentOnEnd" format="boolean"/>
+	    <attr name="circleRadius" format="reference"/>
+	    <attr name="rotationRadius" format="reference"/>
+	    <attr name="rotationDuration" format="integer"/>
+	    <attr name="splashDuration" format="integer"/>
+	    <attr name="splashBackgroundColor" format="color"/>
+	    <attr name="singleCircleColor" format="color"/>
+	    <attr name="circleColors" format="reference"/>
     </declare-styleable>
 </resources>

@@ -5,8 +5,17 @@
     android:layout_height="match_parent" >
     
     <com.yildizkabaran.newsdigestsplash.view.SplashView 
+        xmlns:app="http://schemas.android.com/apk/res/com.yildizkabaran.newsdigestsplash"
     	android:id="@+id/splash_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        app:removeFromParentOnEnd="true"
+        app:circleRadius="@dimen/splash_circle_radius"
+        app:rotationRadius="@dimen/splash_rotation_radius"
+        app:rotationDuration="@integer/splash_rotation_duration"
+        app:splashDuration="@integer/splash_duration"
+        app:splashBackgroundColor="@color/splash_bg"
+        app:singleCircleColor="@color/blue"
+        app:circleColors="@array/splash_circle_colors" />
 
 </FrameLayout>

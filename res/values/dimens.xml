@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="splash_radius">30dp</dimen>
+    <dimen name="splash_rotation_radius">30dp</dimen>
     <dimen name="splash_circle_radius">6dp</dimen>
+    <integer name="splash_rotation_duration">1200</integer>
+    <integer name="splash_duration">1200</integer>
 </resources>

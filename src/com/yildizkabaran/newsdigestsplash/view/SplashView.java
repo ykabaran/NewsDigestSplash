@@ -4,7 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.animation.ValueAnimator.AnimatorUpdateListener;
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewManager;
 import android.view.ViewParent;
 import android.view.animation.DecelerateInterpolator;
-import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 
@@ -60,8 +58,8 @@ public class SplashView extends View {
    */
   public SplashView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    setupAttributes(attrs);
     initialize();
+    setupAttributes(attrs);
   }
 
   /**
@@ -71,37 +69,32 @@ public class SplashView extends View {
    */
   public SplashView(Context context, AttributeSet attrs, int defStyleAttr) {
     super(context, attrs, defStyleAttr);
-    setupAttributes(attrs);
     initialize();
+    setupAttributes(attrs);
   }
   
-  /*** REMOVE THESE *****/
-  private static final int COLOR_ORANGE = Color.rgb(255, 150, 0);
-  private static final int COLOR_AQUA = Color.rgb(2, 209, 172);
-  private static final int COLOR_YELLOW = Color.rgb(255, 210, 0);
-  private static final int COLOR_BLUE = Color.rgb(0, 198, 255);
-  private static final int COLOR_GREEN = Color.rgb(0, 224, 153);
-  private static final int COLOR_PINK = Color.rgb(255, 56, 145);
-  /********/
-  
   public static final boolean DEFAULT_REMOVE_FROM_PARENT_ON_END = true;
-  public static final int DEFAULT_RADIUS = 30; //dp
-  public static final int DEFAULT_CIRCLE_RADIUS = 6; //dp
-  public static final int DEFAULT_SPLASH_BG_COLOR = Color.rgb(238, 236, 226);
-  public static final long DEFAULT_ROTATION_DURATION = 1200;
+  public static final int DEFAULT_ROTATION_RADIUS = 90;
+  public static final int DEFAULT_CIRCLE_RADIUS = 18;
+  public static final int DEFAULT_SPLASH_BG_COLOR = Color.WHITE;
+  public static final int DEFAULT_SINGLE_CIRCLE_COLOR = Color.BLACK;
+  public static final int DEFAULT_ROTATION_DURATION = 1200;
+  public static final int DEFAULT_SPLASH_DURATION = 1200;
   
   private boolean mRemoveFromParentOnEnd = true; // a flag for removing the view from its parent once the animation is over
-  private float mRotationRadius;
-  private float mCircleRadius;
-  private int[] mColors = {COLOR_ORANGE, COLOR_AQUA, COLOR_YELLOW, COLOR_BLUE, COLOR_GREEN, COLOR_PINK};
-  private int mBgColor;
+  private float mRotationRadius = DEFAULT_ROTATION_RADIUS;
+  private float mCircleRadius = DEFAULT_CIRCLE_RADIUS;
+  private int[] mCircleColors;
+  private long mRotationDuration = DEFAULT_ROTATION_DURATION;
+  private long mSplashDuration = DEFAULT_SPLASH_DURATION;
+  private int mSingleCircleColor;
+  private int mSplashBgColor;
+  private ISplashListener mSplashListener;
   
   private float mHoleRadius = 0F;
   private float mCurrentRotationAngle = 0F;
   private float mCurrentRotationRadius;
-  private float mCurrentCircleRadius;
-  private int mSingleCircleColor;
-  private long mRotationDuration = DEFAULT_ROTATION_DURATION;
+  private float mCurrentSingleCircleRadius;
   
   private SplashState mState = null;
   
@@ -130,6 +123,33 @@ public class SplashView extends View {
       case R.styleable.NewsDigestSplashView_removeFromParentOnEnd:
         setRemoveFromParentOnEnd(a.getBoolean(i, DEFAULT_REMOVE_FROM_PARENT_ON_END));
         break;
+      case R.styleable.NewsDigestSplashView_circleRadius:
+        setCircleRadius(a.getDimensionPixelSize(i, DEFAULT_CIRCLE_RADIUS));
+        break;
+      case R.styleable.NewsDigestSplashView_rotationRadius:
+        setRotationRadius(a.getDimensionPixelSize(i, DEFAULT_ROTATION_RADIUS));
+        break;
+      case R.styleable.NewsDigestSplashView_rotationDuration:
+        setRotationDuration(a.getInteger(i, DEFAULT_ROTATION_DURATION));
+        break;
+      case R.styleable.NewsDigestSplashView_splashBackgroundColor:
+        setSplashBackgroundColor(a.getColor(i, DEFAULT_SPLASH_BG_COLOR));
+        break;
+      case R.styleable.NewsDigestSplashView_singleCircleColor:
+        setSingleCircleColor(a.getColor(i, DEFAULT_SINGLE_CIRCLE_COLOR));
+        break;
+      case R.styleable.NewsDigestSplashView_splashDuration:
+        setSplashDuration(a.getInteger(i, DEFAULT_SPLASH_DURATION));
+        break;
+      case R.styleable.NewsDigestSplashView_circleColors:
+        int arrayId = a.getResourceId(i, -1);
+        if(arrayId >= 0){
+          int[] circleColors = getResources().getIntArray(arrayId);
+          if(circleColors != null){
+            setCircleColors(circleColors);
+          }
+        }
+        break;
       }
     }
     a.recycle();
@@ -141,28 +161,40 @@ public class SplashView extends View {
   private void initialize(){
     setBackgroundColor(Color.TRANSPARENT);
     
-    float density = getResources().getDisplayMetrics().density;
-    setRotationRadius(density * DEFAULT_RADIUS);
-    setCircleRadius(density * DEFAULT_CIRCLE_RADIUS);
-    
     mPaint.setAntiAlias(true);
     
-    setSplashBackgroundColor(DEFAULT_SPLASH_BG_COLOR);
     mPaintBackground.setStyle(Paint.Style.STROKE);
     mPaintBackground.setAntiAlias(true);
-  }
-  
-  public void setRotationRadius(float rotationRadius){
-    mRotationRadius = rotationRadius;
+    setSplashBackgroundColor(DEFAULT_SPLASH_BG_COLOR);
   }
   
   public void setCircleRadius(float circleRadius){
     mCircleRadius = circleRadius;
   }
   
+  public void setRotationRadius(float rotationRadius){
+    mRotationRadius = rotationRadius;
+  }
+  
+  public void setRotationDuration(long duration){
+    mRotationDuration = duration;
+  }
+  
   public void setSplashBackgroundColor(int bgColor){
-    mBgColor = bgColor;
-    mPaintBackground.setColor(mBgColor);
+    mSplashBgColor = bgColor;
+    mPaintBackground.setColor(mSplashBgColor);
+  }
+  
+  public void setSingleCircleColor(int circleColor){
+    mSingleCircleColor = circleColor;
+  }
+  
+  public void setSplashDuration(long duration){
+    mSplashDuration = duration;
+  }
+  
+  public void setCircleColors(int[] circleColors){
+    mCircleColors = circleColors;
   }
   
   /**
@@ -179,67 +211,13 @@ public class SplashView extends View {
    * @param listener
    */
   public void splashAndDisappear(final ISplashListener listener){
-    // create an animator from scale 1 to max
-    final ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+    mSplashListener = listener;
     
-    // add an update listener so that we draw the view on each update
-    animator.addUpdateListener(new AnimatorUpdateListener() {
-      @Override
-      public void onAnimationUpdate(ValueAnimator animation) {
-        // invalidate the view so that it gets redraw if it needs to be
-        invalidate();
-        
-        // notify the listener if set
-        // for some reason this animation can run beyond 100%
-        if(listener != null){
-          listener.onUpdate((float) animation.getCurrentPlayTime() / animation.getDuration());
-        }
-      }
-    });
-    
-    // add a listener for the general animation events, use the AnimatorListenerAdapter so that we don't clutter the code
-    animator.addListener(new AnimatorListenerAdapter(){
-      @Override
-      public void onAnimationStart(Animator animation){
-        // notify the listener of animation start (if listener is set)
-        if(listener != null){
-          listener.onStart();
-        }
-      }
-      
-      @Override
-      public void onAnimationEnd(Animator animation){
-        // check if we need to remove the view on animation end
-        if(mRemoveFromParentOnEnd){
-          // get the view parent
-          ViewParent parent = getParent();
-          // check if a parent exists and that it implements the ViewManager interface
-          if(parent != null && parent instanceof ViewManager){
-            ViewManager viewManager = (ViewManager) parent;
-            // remove the view from its parent
-            viewManager.removeView(SplashView.this);
-          } else if(BuildConfig.DEBUG) {
-            // even though we had to remove the view we either don't have a parent, or the parent does not implement the method
-            // necessary to remove the view, therefore create a warning log (but only do this if we are in DEBUG mode)
-            Log.w(TAG, "splash view not removed after animation ended because no ViewManager parent was found");
-          }
-        }
-        
-        // notify the listener of animation end (if listener is set)
-        if(listener != null){
-          listener.onEnd();
-        }
-      }
-    });
-    
-    // start the animation using post so that the animation does not start if the view is not in foreground
-    post(new Runnable(){
-      @Override
-      public void run(){
-        // start the animation in reverse to get the desired effect from the interpolator
-        animator.start();
-      }
-    });
+    if(mState != null && mState instanceof RotationState){
+      RotationState rotationState = (RotationState) mState;
+      rotationState.cancel();
+    }
+    mState = new MergingState();
   }
   
   @Override
@@ -255,8 +233,9 @@ public class SplashView extends View {
     mState = new RotationState();
     
     mCurrentRotationAngle = 0F;
+    mHoleRadius = 0F;
     mCurrentRotationRadius = mRotationRadius;
-    mCurrentCircleRadius = mCircleRadius;
+    mCurrentSingleCircleRadius = mCircleRadius;
   }
   
   @Override
@@ -264,6 +243,11 @@ public class SplashView extends View {
     if(mState == null){
       handleFirstDraw();
     }
+    
+    if(mCircleColors == null){
+      mCircleColors = new int[0];
+    }
+    
     mState.drawState(canvas);
   }
   
@@ -275,26 +259,44 @@ public class SplashView extends View {
       mPaintBackground.setStrokeWidth(strokeWidth);
       canvas.drawCircle(mCenterX, mCenterY, circleRadius, mPaintBackground);
     } else {
-      canvas.drawColor(mBgColor);
+      canvas.drawColor(mSplashBgColor);
     }
   }
   
   private void drawCircles(Canvas canvas){
-    int numCircles = mColors.length;
+    int numCircles = mCircleColors.length;
     float rotationAngle = (float) (2 * Math.PI / numCircles);
     for(int i=0; i<numCircles; ++i){
       double angle = mCurrentRotationAngle + (i * rotationAngle);
       double circleX = mCenterX + mCurrentRotationRadius * Math.sin(angle);
       double circleY = mCenterY - mCurrentRotationRadius * Math.cos(angle);
       
-      mPaint.setColor(mColors[i]);
-      canvas.drawCircle((float) circleX, (float) circleY, mCurrentCircleRadius, mPaint);
+      mPaint.setColor(mCircleColors[i]);
+      canvas.drawCircle((float) circleX, (float) circleY, mCircleRadius, mPaint);
     }
   }
   
   private void drawSingleCircle(Canvas canvas){
     mPaint.setColor(mSingleCircleColor);
-    canvas.drawCircle(mCenterX, mCenterY, mCurrentCircleRadius, mPaint);
+    canvas.drawCircle(mCenterX, mCenterY, mCurrentSingleCircleRadius, mPaint);
+  }
+  
+  private void removeFromParentIfNecessary(){
+    // check if we need to remove the view on animation end
+    if(mRemoveFromParentOnEnd){
+      // get the view parent
+      ViewParent parent = getParent();
+      // check if a parent exists and that it implements the ViewManager interface
+      if(parent != null && parent instanceof ViewManager){
+        ViewManager viewManager = (ViewManager) parent;
+        // remove the view from its parent
+        viewManager.removeView(SplashView.this);
+      } else if(BuildConfig.DEBUG) {
+        // even though we had to remove the view we either don't have a parent, or the parent does not implement the method
+        // necessary to remove the view, therefore create a warning log (but only do this if we are in DEBUG mode)
+        Log.w(TAG, "splash view not removed after animation ended because no ViewManager parent was found");
+      }
+    }
   }
   
   private abstract class SplashState {
@@ -325,62 +327,118 @@ public class SplashView extends View {
       drawBackground(canvas);
       drawCircles(canvas);
     }
+    
+    public void cancel(){
+      mAnimator.cancel();
+    }
   }
   
-//  private class MergingState extends SplashState {
-//    private Interpolator mInterpolator = new OvershootInterpolator(6F);
-//    private long mCurrentValue = MERGING_DURATION;
-//
-//    @Override
-//    public void drawState(Canvas canvas){
-//      drawBackground(canvas);
-//      drawCircles(canvas);
-//    }
-//    
-//    public void updateState(long millisElapsed) {
-//      mCurrentValue -= millisElapsed;
-//      if(mCurrentValue <= 0){
-//        mCurrentRadius = 0;
-//        mState = new SingularityState();
-//      } else {
-//        mCurrentRadius = mRadius * mInterpolator.getInterpolation((float) mCurrentValue / MERGING_DURATION);
-//      }
-//    }
-//  }
-//  
-//  private class SingularityState extends SplashState {
-//    private Interpolator mInterpolator = new OvershootInterpolator(6F);
-//    private long mCurrentValue = SINGULARITY_DURATION;
-//
-//    @Override
-//    public void drawState(Canvas canvas){
-//      drawBackground(canvas);
-//      drawSingleCircle(canvas);
-//    }
-//    
-//    public void updateState(long millisElapsed) {
-//      mCurrentValue -= millisElapsed;
-//      if(mCurrentValue <= 0){
-//        mCurrentCircleRadius = 0;
-//        mState = new ExpandingState();
-//      } else {
-//        mCurrentCircleRadius = mCircleRadius * mInterpolator.getInterpolation((float) mCurrentValue / SINGULARITY_DURATION);
-//      }
-//    }
-//  }
-//  
-//  private class ExpandingState extends SplashState {
-//    private Interpolator mInterpolator = new DecelerateInterpolator();
-//    private long mCurrentValue = 0;
-//    
-//    @Override
-//    public void drawState(Canvas canvas){
-//      drawBackground(canvas);
-//    }
-//    
-//    public void updateState(long millisElapsed){
-//      mCurrentValue += millisElapsed;
-//      mHoleRadius = mDiagonalDist * mInterpolator.getInterpolation((float) mCurrentValue / EXPAND_DURATION);
-//    }
-//  }
+  private class MergingState extends SplashState {
+    
+    public MergingState(){      
+      ValueAnimator animator = ValueAnimator.ofFloat(0, 1);
+      animator.setDuration(mSplashDuration / 3);
+      animator.setInterpolator(new OvershootInterpolator(6F));
+      animator.addUpdateListener(new AnimatorUpdateListener(){
+        @Override
+        public void onAnimationUpdate(ValueAnimator animator) {
+          mCurrentRotationRadius = mRotationRadius * (Float) animator.getAnimatedValue();
+          invalidate();
+          
+          if(mSplashListener != null){
+            mSplashListener.onUpdate((float) animator.getCurrentPlayTime() / animator.getDuration() / 3);
+          }
+        }
+      });
+      animator.addListener(new AnimatorListenerAdapter(){
+        @Override
+        public void onAnimationStart(Animator animator){
+          if(mSplashListener != null){
+            mSplashListener.onStart();
+          }
+        }
+        
+        @Override
+        public void onAnimationEnd(Animator animator){
+          mState = new SingularityState();
+        }
+      });
+      animator.reverse();
+    }
+
+    @Override
+    public void drawState(Canvas canvas){
+      drawBackground(canvas);
+      drawCircles(canvas);
+    }
+  }
+  
+  private class SingularityState extends SplashState {
+    
+    public SingularityState(){      
+      ValueAnimator animator = ValueAnimator.ofFloat(0, mCircleRadius);
+      animator.setDuration(mSplashDuration / 3);
+      animator.setInterpolator(new OvershootInterpolator(6F));
+      animator.addUpdateListener(new AnimatorUpdateListener(){
+        @Override
+        public void onAnimationUpdate(ValueAnimator animator) {
+          mCurrentSingleCircleRadius = (Float) animator.getAnimatedValue();
+          invalidate();
+          
+          if(mSplashListener != null){
+            mSplashListener.onUpdate(1F/3 + (float) animator.getCurrentPlayTime() / animator.getDuration() / 3);
+          }
+        }
+      });
+      animator.addListener(new AnimatorListenerAdapter(){
+        @Override
+        public void onAnimationEnd(Animator animator){
+          mState = new ExpandingState();
+        }
+      });
+      animator.reverse();
+    }
+    
+    @Override
+    public void drawState(Canvas canvas){
+      drawBackground(canvas);
+      drawSingleCircle(canvas);
+    }
+  }
+  
+  private class ExpandingState extends SplashState {
+    
+    public ExpandingState(){      
+      ValueAnimator animator = ValueAnimator.ofFloat(0, mDiagonalDist);
+      animator.setDuration(mSplashDuration / 3);
+      animator.setInterpolator(new DecelerateInterpolator());
+      animator.addUpdateListener(new AnimatorUpdateListener(){
+        @Override
+        public void onAnimationUpdate(ValueAnimator animator) {
+          mHoleRadius = (Float) animator.getAnimatedValue();
+          invalidate();
+          
+          if(mSplashListener != null){
+            mSplashListener.onUpdate(2F/3 + (float) animator.getCurrentPlayTime() / animator.getDuration() / 3);
+          }
+        }
+      });
+      animator.addListener(new AnimatorListenerAdapter(){
+        @Override
+        public void onAnimationEnd(Animator animator){
+          removeFromParentIfNecessary();
+          
+          if(mSplashListener != null){
+            mSplashListener.onEnd();
+          }
+        }
+      });
+      animator.start();
+    }
+    
+    @Override
+    public void drawState(Canvas canvas){
+      drawBackground(canvas);
+    }
+  }
 }

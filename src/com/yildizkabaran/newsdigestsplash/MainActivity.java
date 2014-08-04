@@ -18,7 +18,7 @@ import com.yildizkabaran.newsdigestsplash.view.SplashView.ISplashListener;
 public class MainActivity extends Activity {
 
   private static final String TAG = "MainActivity";
-  private static final boolean DO_XML = false;
+  private static final boolean DO_XML = true;
   
   private ViewGroup mMainView;
   private SplashView mSplashView;
@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
+    
     // change the DO_XML variable to switch between code and xml
     if(DO_XML){
       // inflate the view from XML and then get a reference to it
@@ -42,6 +42,15 @@ public class MainActivity extends Activity {
       // create the splash view
       mSplashView = new SplashView(getApplicationContext());
       mSplashView.setRemoveFromParentOnEnd(true); // remove the SplashView from MainView once animation is completed
+      mSplashView.setSplashBackgroundColor(getResources().getColor(R.color.splash_bg)); // the background color of the view
+      mSplashView.setRotationRadius(getResources().getDimensionPixelOffset(R.dimen.splash_rotation_radius)); // radius of the big circle that the little circles will rotate on
+      mSplashView.setCircleRadius(getResources().getDimensionPixelSize(R.dimen.splash_circle_radius)); // radius of each circle
+      mSplashView.setRotationDuration(getResources().getInteger(R.integer.splash_rotation_duration)); // time for one rotation to be completed by the small circles
+      mSplashView.setSplashDuration(getResources().getInteger(R.integer.splash_duration)); // total time taken for the circles to merge together and disappear
+      mSplashView.setSingleCircleColor(getResources().getColor(R.color.blue)); // the color of the single circle left right after they all merge
+      mSplashView.setCircleColors(getResources().getIntArray(R.array.splash_circle_colors)); // the colors of each circle in order
+      
+      // add splash view to the parent view
       mMainView.addView(mSplashView);
       setContentView(mMainView);
     }

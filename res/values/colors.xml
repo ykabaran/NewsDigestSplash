@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="splash_bg">#FFFFFF</color>
+	<color name="orange">#FF9600</color>
+	<color name="aqua">#02D1AC</color>
+	<color name="yellow">#FFD200</color>
+	<color name="blue">#00C6FF</color>
+	<color name="green">#00E099</color>
+	<color name="pink">#FF3892</color>
+	
+	<array name="splash_circle_colors">
+        <item>@color/orange</item>
+        <item>@color/aqua</item>
+        <item>@color/yellow</item>
+        <item>@color/blue</item>
+        <item>@color/green</item>
+        <item>@color/pink</item>
+    </array>
+</resources>
