@@ -7,21 +7,28 @@ A simple replication of Yahoo! News Digest's splash animation as seen in Android
 
 ## Installation
 
-Simply copy the SplashView.java file into your project and use it like you would use any other custom view. If you would like to inflate from XML, then you might also want to copy the resources in attrs.xml file as well.
+Simply copy the SplashView.java and attrs.xml files into your project and use it like you would use any other custom view.
 
 ## Usage
 
 You can create in code:
 ```
 // create and customize the view
-SplashView splashView = new SplashView(getApplicationContext());
-splashView.setRemoveFromParentOnEnd(true); // remove the SplashView from MainView once animation is completed
-splashView.setSplashBackgroundColor(getResources().getColor(R.color.splash_bg)); // the background color of the view
-splashView.setRotationRadius(getResources().getDimensionPixelOffset(R.dimen.splash_rotation_radius)); // radius of the big circle that the little circles will rotate on
-splashView.setCircleRadius(getResources().getDimensionPixelSize(R.dimen.splash_circle_radius)); // radius of each circle
-splashView.setRotationDuration(getResources().getInteger(R.integer.splash_rotation_duration)); // time for one rotation to be completed by the small circles
-splashView.setSplashDuration(getResources().getInteger(R.integer.splash_duration)); // total time taken for the circles to merge together and disappear
-splashView.setCircleColors(getResources().getIntArray(R.array.splash_circle_colors)); // the colors of each circle in order
+SplashView splashView = new SplashView(context);
+// remove the SplashView from MainView once animation is completed
+splashView.setRemoveFromParentOnEnd(true);
+// the background color of the view
+splashView.setSplashBackgroundColor(getResources().getColor(R.color.splash_bg));
+// radius of the big circle that the little circles will rotate on
+splashView.setRotationRadius(getResources().getDimensionPixelOffset(R.dimen.splash_rotation_radius));
+// radius of each circle
+splashView.setCircleRadius(getResources().getDimensionPixelSize(R.dimen.splash_circle_radius));
+// time for one rotation to be completed by the small circles
+splashView.setRotationDuration(getResources().getInteger(R.integer.splash_rotation_duration));
+// total time taken for the circles to merge together and disappear
+splashView.setSplashDuration(getResources().getInteger(R.integer.splash_duration));
+// the colors of each circle, in order
+splashView.setCircleColors(getResources().getIntArray(R.array.splash_circle_colors));
 ```
 
 or in XML:
@@ -60,6 +67,10 @@ splashView.splashAndDisappear(new ISplashListener(){
 	}
 });
 ```
+
+In the sample code a boolean DO_XML variable is provided to demonstrate both methods.
+
+Please feel free to ask for any fixes/customizations/additions to this view.
 
 ## Notes
 
