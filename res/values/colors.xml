@@ -9,11 +9,11 @@
 	<color name="pink">#FF3892</color>
 	
 	<array name="splash_circle_colors">
+        <item>@color/green</item>
+        <item>@color/pink</item>
         <item>@color/orange</item>
         <item>@color/aqua</item>
         <item>@color/yellow</item>
         <item>@color/blue</item>
-        <item>@color/green</item>
-        <item>@color/pink</item>
     </array>
 </resources>

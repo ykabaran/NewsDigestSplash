@@ -47,7 +47,6 @@ public class MainActivity extends Activity {
       mSplashView.setCircleRadius(getResources().getDimensionPixelSize(R.dimen.splash_circle_radius)); // radius of each circle
       mSplashView.setRotationDuration(getResources().getInteger(R.integer.splash_rotation_duration)); // time for one rotation to be completed by the small circles
       mSplashView.setSplashDuration(getResources().getInteger(R.integer.splash_duration)); // total time taken for the circles to merge together and disappear
-      mSplashView.setSingleCircleColor(getResources().getColor(R.color.blue)); // the color of the single circle left right after they all merge
       mSplashView.setCircleColors(getResources().getIntArray(R.array.splash_circle_colors)); // the colors of each circle in order
       
       // add splash view to the parent view

@@ -78,7 +78,6 @@ public class SplashView extends View {
   public static final int DEFAULT_ROTATION_RADIUS = 90; // do not leave this dimension as default since it is in px
   public static final int DEFAULT_CIRCLE_RADIUS = 18; // do not leave this dimension as default since it is in px
   public static final int DEFAULT_SPLASH_BG_COLOR = Color.WHITE;
-  public static final int DEFAULT_SINGLE_CIRCLE_COLOR = Color.BLACK;
   public static final int DEFAULT_ROTATION_DURATION = 1200; // ms
   public static final int DEFAULT_SPLASH_DURATION = 1200; // ms
   
@@ -89,7 +88,6 @@ public class SplashView extends View {
   private int[] mCircleColors; // the color list of the circles, no default is provided here
   private long mRotationDuration = DEFAULT_ROTATION_DURATION; // the duration, in ms, for one complete rotation of the circles
   private long mSplashDuration = DEFAULT_SPLASH_DURATION; // the duration, in ms, for the splash animation to go away
-  private int mSingleCircleColor = DEFAULT_SINGLE_CIRCLE_COLOR; // the color of the single circle left in the middle of the splash
   private int mSplashBgColor; // the color of the background, the default is set in initialize()
   private ISplashListener mSplashListener; // reference to the listener for the splash events
   
@@ -138,9 +136,6 @@ public class SplashView extends View {
         break;
       case R.styleable.NewsDigestSplashView_splashBackgroundColor:
         setSplashBackgroundColor(a.getColor(i, DEFAULT_SPLASH_BG_COLOR));
-        break;
-      case R.styleable.NewsDigestSplashView_singleCircleColor:
-        setSingleCircleColor(a.getColor(i, DEFAULT_SINGLE_CIRCLE_COLOR));
         break;
       case R.styleable.NewsDigestSplashView_splashDuration:
         setSplashDuration(a.getInteger(i, DEFAULT_SPLASH_DURATION));
@@ -210,14 +205,6 @@ public class SplashView extends View {
   public void setSplashBackgroundColor(int bgColor){
     mSplashBgColor = bgColor;
     mPaintBackground.setColor(mSplashBgColor);
-  }
-  
-  /**
-   * Setter for the color of the circle to be drawn at the end. This method might be removed in the future with the last circle color used for this value instead
-   * @param circleColor
-   */
-  public void setSingleCircleColor(int circleColor){
-    mSingleCircleColor = circleColor;
   }
   
   /**
@@ -365,7 +352,12 @@ public class SplashView extends View {
    * @param canvas
    */
   private void drawSingleCircle(Canvas canvas){
-    mPaint.setColor(mSingleCircleColor);
+    int singleCircleColor = mSplashBgColor;
+    int numColors = mCircleColors.length;
+    if(numColors > 0){
+      singleCircleColor = mCircleColors[numColors - 1];
+    }
+    mPaint.setColor(singleCircleColor);
     canvas.drawCircle(mCenterX, mCenterY, mCurrentSingleCircleRadius, mPaint);
   }
   

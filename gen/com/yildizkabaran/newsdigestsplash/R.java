@@ -15,7 +15,7 @@ public final class R {
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
-        public static final int circleColors=0x7f010007;
+        public static final int circleColors=0x7f010006;
         /** <p>Must be a reference to another resource, in the form "<code>@[+][<i>package</i>:]<i>type</i>:<i>name</i></code>"
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
@@ -40,15 +40,6 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
          */
         public static final int rotationRadius=0x7f010002;
-        /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
-"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-         */
-        public static final int singleCircleColor=0x7f010006;
         /** <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
 "<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
 <p>This may also be a reference to a resource (in the form
@@ -127,7 +118,6 @@ containing a value of this type.
            <tr><td><code>{@link #NewsDigestSplashView_removeFromParentOnEnd com.yildizkabaran.newsdigestsplash:removeFromParentOnEnd}</code></td><td></td></tr>
            <tr><td><code>{@link #NewsDigestSplashView_rotationDuration com.yildizkabaran.newsdigestsplash:rotationDuration}</code></td><td></td></tr>
            <tr><td><code>{@link #NewsDigestSplashView_rotationRadius com.yildizkabaran.newsdigestsplash:rotationRadius}</code></td><td></td></tr>
-           <tr><td><code>{@link #NewsDigestSplashView_singleCircleColor com.yildizkabaran.newsdigestsplash:singleCircleColor}</code></td><td></td></tr>
            <tr><td><code>{@link #NewsDigestSplashView_splashBackgroundColor com.yildizkabaran.newsdigestsplash:splashBackgroundColor}</code></td><td></td></tr>
            <tr><td><code>{@link #NewsDigestSplashView_splashDuration com.yildizkabaran.newsdigestsplash:splashDuration}</code></td><td></td></tr>
            </table>
@@ -136,13 +126,12 @@ containing a value of this type.
            @see #NewsDigestSplashView_removeFromParentOnEnd
            @see #NewsDigestSplashView_rotationDuration
            @see #NewsDigestSplashView_rotationRadius
-           @see #NewsDigestSplashView_singleCircleColor
            @see #NewsDigestSplashView_splashBackgroundColor
            @see #NewsDigestSplashView_splashDuration
          */
         public static final int[] NewsDigestSplashView = {
             0x7f010000, 0x7f010001, 0x7f010002, 0x7f010003,
-            0x7f010004, 0x7f010005, 0x7f010006, 0x7f010007
+            0x7f010004, 0x7f010005, 0x7f010006
         };
         /**
           <p>This symbol is the offset where the {@link com.yildizkabaran.newsdigestsplash.R.attr#circleColors}
@@ -153,7 +142,7 @@ containing a value of this type.
 or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>".
           @attr name com.yildizkabaran.newsdigestsplash:circleColors
         */
-        public static final int NewsDigestSplashView_circleColors = 7;
+        public static final int NewsDigestSplashView_circleColors = 6;
         /**
           <p>This symbol is the offset where the {@link com.yildizkabaran.newsdigestsplash.R.attr#circleRadius}
           attribute's value can be found in the {@link #NewsDigestSplashView} array.
@@ -202,21 +191,6 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
           @attr name com.yildizkabaran.newsdigestsplash:rotationRadius
         */
         public static final int NewsDigestSplashView_rotationRadius = 2;
-        /**
-          <p>This symbol is the offset where the {@link com.yildizkabaran.newsdigestsplash.R.attr#singleCircleColor}
-          attribute's value can be found in the {@link #NewsDigestSplashView} array.
-
-
-          <p>Must be a color value, in the form of "<code>#<i>rgb</i></code>", "<code>#<i>argb</i></code>",
-"<code>#<i>rrggbb</i></code>", or "<code>#<i>aarrggbb</i></code>".
-<p>This may also be a reference to a resource (in the form
-"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
-theme attribute (in the form
-"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
-containing a value of this type.
-          @attr name com.yildizkabaran.newsdigestsplash:singleCircleColor
-        */
-        public static final int NewsDigestSplashView_singleCircleColor = 6;
         /**
           <p>This symbol is the offset where the {@link com.yildizkabaran.newsdigestsplash.R.attr#splashBackgroundColor}
           attribute's value can be found in the {@link #NewsDigestSplashView} array.

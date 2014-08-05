@@ -7,7 +7,6 @@
 	    <attr name="rotationDuration" format="integer"/>
 	    <attr name="splashDuration" format="integer"/>
 	    <attr name="splashBackgroundColor" format="color"/>
-	    <attr name="singleCircleColor" format="color"/>
 	    <attr name="circleColors" format="reference"/>
     </declare-styleable>
 </resources>

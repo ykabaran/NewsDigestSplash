@@ -15,7 +15,6 @@
         app:rotationDuration="@integer/splash_rotation_duration"
         app:splashDuration="@integer/splash_duration"
         app:splashBackgroundColor="@color/splash_bg"
-        app:singleCircleColor="@color/blue"
         app:circleColors="@array/splash_circle_colors" />
 
 </FrameLayout>
