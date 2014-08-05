@@ -18,7 +18,7 @@ import com.yildizkabaran.newsdigestsplash.view.SplashView.ISplashListener;
 public class MainActivity extends Activity {
 
   private static final String TAG = "MainActivity";
-  private static final boolean DO_XML = true;
+  private static final boolean DO_XML = false;
   
   private ViewGroup mMainView;
   private SplashView mSplashView;

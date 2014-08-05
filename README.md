@@ -1,4 +1,4 @@
-# Yahoo! News Digest Splash Android
+# Yahoo! News Digest Splash for Android
 by Yildiz Kabaran
 
 A simple replication of Yahoo! News Digest's splash animation as seen in Android and iOS apps. The animation can be used with any number, and any colored circles, with any background, at any speed.
